@@ -9,7 +9,6 @@ int rotatePin =11;
 int laserPin =7;
 
 
-
 void setup() {
   Xservo.attach(XservoPin);  // Attach the servo to the pin
   Yservo.attach(YservoPin);
