@@ -20,21 +20,26 @@ for i in range(len(portsList)):
         print(use)
 
 serialInst.baudrate = 9600
-serialInst.port = use
+serialInst.port = "/dev/ttyUSB0"
 serialInst.open()
 
 while True:
     # time.sleep(0)
-    y,x = mouse.position
-
-    x1Angle = round((180/1919 )* x)
+    # y,x = mouse.position
+    # yAngle=int(input("Rotate:"))
+    yAngle=90
+    x1Angle=25
+    # x1Angle=int(input("X"))
+    # x1Angle = round((180/1919 )* x)
     # x2Angle = round((180/1919 )* x)
-    x2Angle=x1Angle
-    x1Angle=x2Angle-180
-    x1Angle*=-1
-    yAngle = round((180/1079)*y)
+
+    # x1Angle=x1Angle-180
+    # x1Angle*=-1
+    # x2Angle=x1Angle
+    # yAngle = round((180/1079)*y)
     # command = input("Arduino Command (ON/OFF/exit): ")
-    xAngle = f"{x1Angle},{x2Angle},{yAngle}\n"
+    xAngle = f"{x1Angle},{x1Angle},{yAngle}\n"
+    # print(xAngle)
     # print(xAngle)
     # command=command + '\n'
     # print(xAngle)
