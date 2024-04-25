@@ -7,7 +7,8 @@ import tensorflow as tf
 from mtcnn.mtcnn import MTCNN
 from sklearn.preprocessing import LabelEncoder
 from keras_facenet import FaceNet
-
+from centerface import CenterFace
+import time
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
 
@@ -24,6 +25,7 @@ def initialize():
             print(e)
 
 def load_models():
+    global detector, facenet, model, encoder, haarcascade
     # Initialize MTCNN detector
     detector = MTCNN()
 
@@ -41,7 +43,6 @@ def load_models():
 
     # Load Haar cascade classifier for face detection
     haarcascade = cv.CascadeClassifier("../../data/haarcascade_frontalface_default.xml")
-    global detector, facenet, model, encoder, haarcascade
 
 def laser_movement(x, y, w, h):
     dotx = x + (w // 2)
@@ -51,17 +52,26 @@ def laser_movement(x, y, w, h):
     xAngle = f"{xan},{xan},{yan}\n"
     serialInst.write(xAngle.encode('utf-8'))
 
-def recognize_faces(facenet, model, encoder):
-    for x, y, w, h in faces:
-        img = rgb_img[y:y + h, x:x + w]
-        img = cv.resize(img, (160, 160))
-        img = np.expand_dims(img, axis=0)
-        ypred = facenet.embeddings(img)
-        similarity_threshold = 2
-        face_name = model.predict(ypred)
-        decision_score = model.decision_function(ypred)
-        final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
-        return final_name
+def recognize_faces(faces,img):
+    # print("faces = " , faces)
+    # print(faces[0])
+    # print(type(faces))
+
+    x, y, w, h = faces
+    x, y, w, h = int(x), int(y), int(w), int(h)
+    # print(x,y,w,h)
+
+    img = img[y-2:y + h-y+2, x-2:x + w-x+2]
+    # cv.imshow('Image', img)
+    time.sleep(1)
+    img = cv.resize(img, (160, 160))
+    img = np.expand_dims(img, axis=0)
+    ypred = facenet.embeddings(img)
+    similarity_threshold = 2
+    face_name = model.predict(ypred)
+    decision_score = model.decision_function(ypred)
+    final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
+    return final_name
 
 def camera():
     cap = cv.VideoCapture(0)
@@ -71,14 +81,18 @@ def camera():
     while True:
         ret, frame = cap.read()
         dets, lms = centerface(frame, h, w, threshold=0.35)
-        print(dets)
+        # print("dets=",dets , "lms" , lms)
         for det in dets:
             boxes, score = det[:4], det[4]
-            final_name = recognize_faces(facenet,model,encoder)
+            # print("boxes=" , boxes)
+            final_name = recognize_faces(boxes,frame)
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
             print(final_name)
             # cv.circle(frame, (x + (w // 2), y + (h // 2)), radius=2, color=(255, 0, 0), thickness=2)
-            # cv.putText(frame, str(final_name), (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv.LINE_AA)
+            # cv.putText(frame, str(final_name), (boxes[0], boxes[1] - 10), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv.LINE_AA)
+            cv.putText(frame, str(final_name), (int(boxes[0]), int(boxes[1]) - 10), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv.LINE_AA)
+
+
             # laser_movement(x, y, w, h)
         for lm in lms:
             for i in range(0, 5):
@@ -93,6 +107,7 @@ def camera():
 def main():
     initialize()
     load_models()
+    camera()
     cv.destroyAllWindows()
 
 if __name__ == "__main__":
