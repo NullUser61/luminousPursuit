@@ -85,6 +85,7 @@ def setup_venv():
 def install_requirements():
     try:
         subprocess.check_call(["pip", "install", "-r", "requirements.txt"])
+        subprocess.check_call(["pip", "install", "comet_ml"])
         print("Dependencies installed successfully!")
         return True
     except subprocess.CalledProcessError as e:
@@ -93,6 +94,7 @@ def install_requirements():
 
 
 def download_file():
+    print("Downloading Started")
     import requests
     try:
         response = requests.get("https://universe.roboflow.com/ds/naJ7QRzCU6?key=6ZPMmnDjm3")
@@ -111,6 +113,7 @@ def download_file():
 
 def unzip_file():
     import zipfile
+    print("Unzipping Started")
     try:
         with zipfile.ZipFile("tiger_dataset.zip", 'r') as zip_ref:
             zip_ref.extractall(os.getcwd())
@@ -121,6 +124,42 @@ def unzip_file():
         return False
 
 
+def write_to_yaml(file_path):
+    data = """
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 1
+names: ['Tiger']
+
+roboflow:
+  workspace: tiger-vliot
+  project: tiger-z0d6k
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/tiger-vliot/tiger-z0d6k/dataset/2
+"""
+    try:
+        with open(file_path, 'w') as yaml_file:
+            yaml_file.write(data)
+        print(f"Data written to '{file_path}' successfully!")
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+
+def create_model():
+    try:
+        print("Model Creation Started")
+        execute="python train.py --img 640 --epochs 3 --data data.yaml --weights yolov5s.pt"
+        subprocess.check_call(execute)
+        print("Created Model")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+        return False
+    
 if __name__ == "__main__":
     folder_name = "Model_Creation_Tiger"  # Specify the name of the folder you want to create
     delete_directory(folder_name)
@@ -135,3 +174,5 @@ if __name__ == "__main__":
         install_requirements()
         download_file()
         unzip_file()
+        write_to_yaml("data.yaml")
+        create_model()
