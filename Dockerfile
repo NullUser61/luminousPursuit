@@ -19,7 +19,7 @@ RUN apt-get update && \
 # For example, if your script requires specific Python packages, you can install them here
 
 # Copy your Python script and any other necessary files into the container
-COPY modelCreation.py /app/modelCreation.py
+COPY . /app
 
 # Set the entry point for the container
 #CMD ["python3", "modelCreation.py"]
