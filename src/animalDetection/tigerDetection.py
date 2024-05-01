@@ -1,46 +1,54 @@
+# Import libraries
 import cv2
-import torch
+from pathlib import Path
+# from ultralytics import YOLO
+import yolov5
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Using device: {device}")
 
 
-# Replace 'yolov8n.pt' with the path to your pre-trained YOLOv8 model weights file
-model = torch.hub.load('../../data/Animal/Tiger', 'yolov8n', pretrained=True)
+# Model path (assuming your model is named "best.pt" in the same folder)
+model_path = Path("../../data/Animal/tiger.pt")  # Use Path object for clarity
 
-# Set the class index for tiger (assuming 'tiger' is class 0 in your dataset)
-class_index = 0
+# Load YOLOv5 model
+model = yolov5.load(str(model_path))  # Convert Path object to string for YOLO
 
-# Open the default webcam (replace 0 with a different video source index if needed)
-cap = cv2.VideoCapture(0)
+# Function to detect tigers in an image
+def detect_tigers(frame):
+    # Preprocess frame (optional, depending on your model's requirements)
+    # You might need to resize or normalize the frame based on your model's input size
+
+    # Perform YOLOv5 detection
+    results = model(frame)
+    # Get tiger detections (adjust class index based on your custom model classes)
+    tiger_detections = results.pandas().xyxy[0][results.pandas().xyxy[0]['name'] == 'tiger']
+
+    # Process detections (optional)
+    # You can loop through detections, draw bounding boxes, etc.
+    if not tiger_detections.empty:
+        for index, row in tiger_detections.iterrows():
+            xmin, ymin, xmax, ymax, confidence, class_name = row.to_list()
+            cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), (0, 0, 255), 2)  # Draw bounding box (blue)
+
+    return frame
+
+# Read video frame or image
+cap = cv2.VideoCapture(0)  # Change to 0 for webcam or path to video file for video input
+# cap = cv2.imread("image.jpg")  # For image input (replace with your image path)
 
 while True:
     # Capture frame-by-frame
     ret, frame = cap.read()
 
-    # Run inference on the frame
-    results = model(frame)
-
-    # Get detections
-    detections = results.pandas().xyxy[0]
-
-    # Check if any tigers are detected
-    tigers_detected = detections[detections['name'] == 'tiger']
-
-    # Draw bounding boxes and labels for detected tigers
-    if not tigers_detected.empty:
-        for index, row in tigers_detected.iterrows():
-            xmin, ymin, xmax, ymax, confidence, name = row.values
-            cv2.rectangle(frame, (int(xmin), int(ymin)), (int(xmax), int(ymax)), (0, 0, 255), 2)
-            cv2.putText(frame, f"{name} ({confidence:.2f})", (int(xmin), int(ymin) - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
+    # Detect tigers
+    frame_with_detections = detect_tigers(frame)
 
     # Display the resulting frame
-    cv2.imshow('Tiger Detection', frame)
+    cv2.imshow('Tiger Detection', frame_with_detections)
 
-    # Exit on 'q' key press
+    # Exit if 'q' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Release capture and close all windows
+# Release capture
 cap.release()
 cv2.destroyAllWindows()
