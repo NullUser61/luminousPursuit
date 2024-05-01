@@ -5,16 +5,16 @@ FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 WORKDIR /app
 
 # Install necessary system packages
-RUN apt-get update && \
-    apt-get install -y \
-    git \
-    python3 \
-    python3-pip \
-    wget \
-    unzip \
-    python3-venv \
-    python3-opencv \
-    libglib2.0-0
+#RUN apt-get update && \
+#    apt-get install -y \
+#    git \
+#    python3 \
+#    python3-pip \
+#    wget \
+#    unzip \
+#    python3-venv \
+#    python3-opencv \
+#    libglib2.0-0
 
 
 #RUN mkdir -p ~/miniconda3 && \
