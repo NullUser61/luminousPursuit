@@ -7,6 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from keras_facenet import FaceNet
 from src.faceDetection.faceDetection import camera
 from src.faceDetection.centerface import CenterFace
+from src.faceDetection.faceDetection import recognize_faces
 import time
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
@@ -47,7 +48,10 @@ def load_models():
 def main():
     initialize()
     load_models()
-    camera( facenet, model, encoder, centerface)
+    camera( facenet, model, encoder, centerface, Recognise=1)
+    recognize_faces()
+
+
     cv.destroyAllWindows()
 
 

@@ -38,7 +38,7 @@ def recognize_faces(facenet, model, encoder,faces,img):
     final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
     return final_name
 
-def camera(facenet, model, encoder, centerface):
+def camera(facenet, model, encoder, centerface, Recognise):
     cap = cv.VideoCapture(0)
     ret, frame = cap.read()
     try:
@@ -52,8 +52,10 @@ def camera(facenet, model, encoder, centerface):
         for det in dets:
             boxes, score = det[:4], det[4]
             # print("boxes=" , boxes)
-            final_name="random"
-            # final_name = recognize_faces(detector, facenet, model, encoder,boxes,frame)
+            if(Recognise==1):
+                final_name = recognize_faces(detector, facenet, model, encoder,boxes,frame)
+            else:
+                final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
             print(final_name)
             # cv.circle(frame, (x + (w // 2), y + (h // 2)), radius=2, color=(255, 0, 0), thickness=2)
