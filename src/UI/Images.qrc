@@ -1,0 +1,25 @@
+<RCC>
+  <qresource prefix="Icons">
+    <file>Icons/lup.jpg</file>
+    <file>Icons/sound_mute.png</file>
+    <file>Icons/elephant(1).png</file>
+    <file>Icons/image 1.png</file>
+    <file>Icons/call-calling.png</file>
+    <file>Icons/history 1.png</file>
+    <file>Icons/more-square.png</file>
+    <file>Icons/share 1.png</file>
+    <file>Icons/Add_square_fill.png</file>
+    <file>Icons/Group 22.png</file>
+    <file>Icons/LUMINOS_1__1-removebg-preview.png</file>
+    <file>Icons/maps-and-flags 1.png</file>
+    <file>Icons/Group_fill.png</file>
+    <file>Icons/security-camera(1) 1.png</file>
+    <file>Icons/Vector 123.png</file>
+    <file>Icons/🦆 icon _search outline_.png</file>
+    <file>Images.qrc</file>
+    <file>Icons/🦆 icon _film_.png</file>
+    <file>Icons/🦆 icon _home_.png</file>
+    <file>Icons/🦆 icon _log in_.png</file>
+    <file>Icons/🦆 icon _person_.png</file>
+  </qresource>
+</RCC>
