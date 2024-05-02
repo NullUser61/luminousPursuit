@@ -405,6 +405,10 @@ class Page3(object):
         self.authoriseCount.setText(_translate("MainWindow", "1"))
         self.label_10.setText(_translate("MainWindow", "WILD ANIMAL DETECTED"))
         self.shootButton.setText(_translate("MainWindow", "SHOOT"))
+
+    def imageUpdateSlot(self, image):
+        self.cameraFeed.setPixmap(QtGui.QPixmap.fromImage(image))
+
 from src.UI import Images_rc
 
 
