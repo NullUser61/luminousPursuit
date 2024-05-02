@@ -71,7 +71,7 @@ def camera(frame):
     # try:
     # except:
     #     camera(facenet, model, encoder, centerface)
-    load_models()
+    # load_models()
     centerface=CenterFace()
     h, w = frame.shape[:2]
     while True:
@@ -83,7 +83,7 @@ def camera(frame):
             final_name = "random"
             # print("boxes=" , boxes)
             # if(Recognise==1):
-            final_name = recognize_faces(boxes,frame)
+            # final_name = recognize_faces(boxes,frame)
             # else:
                 # final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
