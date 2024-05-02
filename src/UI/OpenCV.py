@@ -3,6 +3,8 @@ import cv2 as cv
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from src.faceDetection.faceDetection import camera
+from src.faceDetection.centerface import CenterFace
 # os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH")
 
 # img = cv.imread('images/IMG_20230827_130752156.jpg')
@@ -35,6 +37,7 @@ class Worker(QThread):
                 if (not isTrue):
                     print("Error")
                 else:
+                    frame=camera(frame)
                     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     flippedImage = cv.flip(image, 1)
                     QtFormattedImage = QImage(flippedImage.data, flippedImage.shape[1], flippedImage.shape[0], QImage.Format_RGB888) 

@@ -1,8 +1,35 @@
 import cv2 as cv
 import numpy as np
 import time
+import numpy as np
+import os
+import pickle
+import tensorflow as tf
+from sklearn.preprocessing import LabelEncoder
+from keras_facenet import FaceNet
+
+from src.faceDetection.centerface import CenterFace
+from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+
+
+def load_models():
+    global  facenet, model, encoder , centerface
+
+    # Load FaceNet model
+    facenet = FaceNet()
+
+    # Load SVM model for face recognition
+    model = pickle.load(open("data/svm_model_S_G_160x160.pkl", 'rb'))
+
+    # Load label encoder for face recognition
+    faces_embeddings = np.load("data/EmbeddedGS.npz")
+    Y = faces_embeddings['arr_1']
+    encoder = LabelEncoder()
+    encoder.fit(Y)
+
+    centerface = CenterFace()
 
 def laser_movement(face):
     x, y, w, h = face
@@ -13,7 +40,7 @@ def laser_movement(face):
     xAngle = f"{xan},{xan},{yan}\n"
     serialInst.write(xAngle.encode('utf-8'))
 
-def recognize_faces(facenet, model, encoder,faces,img):
+def recognize_faces(faces,img):
     print("faces = " , faces)
     # print(faces[0])
     # print(type(faces))
@@ -38,24 +65,27 @@ def recognize_faces(facenet, model, encoder,faces,img):
     final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
     return final_name
 
-def camera(facenet, model, encoder, centerface, Recognise):
-    cap = cv.VideoCapture(0)
-    ret, frame = cap.read()
-    try:
-        h, w = frame.shape[:2]
-    except:
-        camera(facenet, model, encoder, centerface)
+def camera(frame):
+    # cap = cv.VideoCapture(0)
+    # ret, frame = cap.read()
+    # try:
+    # except:
+    #     camera(facenet, model, encoder, centerface)
+    load_models()
+    centerface=CenterFace()
+    h, w = frame.shape[:2]
     while True:
-        ret, frame = cap.read()
+    #     ret, frame = cap.read()
         dets, lms = centerface(frame, h, w, threshold=0.35)
         # print("dets=",dets , "lms" , lms)
         for det in dets:
             boxes, score = det[:4], det[4]
+            final_name = "random"
             # print("boxes=" , boxes)
-            if(Recognise==1):
-                final_name = recognize_faces(detector, facenet, model, encoder,boxes,frame)
-            else:
-                final_name=final_name="random"
+            # if(Recognise==1):
+            final_name = recognize_faces(boxes,frame)
+            # else:
+                # final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
             print(final_name)
             # cv.circle(frame, (x + (w // 2), y + (h // 2)), radius=2, color=(255, 0, 0), thickness=2)
@@ -79,12 +109,12 @@ def camera(facenet, model, encoder, centerface, Recognise):
                 cv.circle(frame, (int(lm[i * 2]), int(lm[i * 2 + 1])), 2, (0, 0, 255), -1)
                 # if(i==2):
                     # laser_movement()
-
-        cv.imshow('out', frame)
-        # Press Q on keyboard to stop recording
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-    cap.release()
+        return frame
+    #     cv.imshow('out', frame)
+    #     # Press Q on keyboard to stop recording
+    #     if cv.waitKey(1) & 0xFF == ord('q'):
+    #         break
+    # # cap.release()
 
 
 def main():
