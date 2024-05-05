@@ -40,16 +40,17 @@ def laser_movement(face):
     xAngle = f"{xan},{xan},{yan}\n"
     serialInst.write(xAngle.encode('utf-8'))
 
-def recognize_faces(faces,img):
-    print("faces = " , faces)
+def recognize_faces(boxes,img, faces, names):
+    print("faces = " , boxes)
     # print(faces[0])
     # print(type(faces))
 
-    x, y, w, h = faces
+    x, y, w, h = boxes
     x, y, w, h = int(x), int(y), int(w), int(h)
     # print(x,y,w,h)
 
     img = img[y-2:y + h-y+2, x-2:x + w-x+2]
+    faces.append(img)
     # cv.imshow('Image', img)
     time.sleep(1)
     try:
@@ -63,6 +64,7 @@ def recognize_faces(faces,img):
     decision_score = model.decision_function(ypred)
     print(decision_score)
     final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
+    names.append[final_name]
     return final_name
 
 def camera(frame):
@@ -77,13 +79,17 @@ def camera(frame):
     while True:
     #     ret, frame = cap.read()
         dets, lms = centerface(frame, h, w, threshold=0.35)
+        unauth_count = 0
+        auth_count = 0
+        names=[]
+        faces=[]
         # print("dets=",dets , "lms" , lms)
         for det in dets:
             boxes, score = det[:4], det[4]
             final_name = "random"
             # print("boxes=" , boxes)
             # if(Recognise==1):
-            # final_name = recognize_faces(boxes,frame)
+            final_name = recognize_faces(boxes,frame,faces,names)
             # else:
                 # final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
@@ -95,21 +101,25 @@ def camera(frame):
                 cv.putText(frame, str(final_name), (int(boxes[0]), int(boxes[1]) - 10), cv.FONT_HERSHEY_SIMPLEX, 1,
                            (0, 0, 255), 3, cv.LINE_AA)
                 cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (0, 0, 225), 1)
+                unauth_count+= 1
+
             else:
                 cv.putText(frame, str(final_name), (int(boxes[0]), int(boxes[1]) - 10), cv.FONT_HERSHEY_SIMPLEX, 1,
                            (0, 225, 0), 3, cv.LINE_AA)
                 cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
+                auth_count+= 1
+                names.append(final_name)
             # laser_movement(boxes)
 
 
-            # laser_movement(x, y, w, h)
+            laser_movement(x, y, w, h)
         for lm in lms:
             # laser_movement(lm[])
             for i in range(2, 3):
                 cv.circle(frame, (int(lm[i * 2]), int(lm[i * 2 + 1])), 2, (0, 0, 255), -1)
                 # if(i==2):
                     # laser_movement()
-        return frame
+        return frame , faces, names , auth_count, unauth_count
     #     cv.imshow('out', frame)
     #     # Press Q on keyboard to stop recording
     #     if cv.waitKey(1) & 0xFF == ord('q'):

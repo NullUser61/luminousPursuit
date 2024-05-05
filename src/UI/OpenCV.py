@@ -51,7 +51,7 @@ class CamFeedThread(QThread):
                 if (not isTrue):
                     print("Capture Stream Closed")
                 else:
-                    # frame=camera(frame)
+                    frame , faces, names , auth_count, unauth_count =camera(frame)
                     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     flippedImage = cv.flip(image, 1)
                     QtFormattedImage = QImage(flippedImage.data, flippedImage.shape[1], flippedImage.shape[0], QImage.Format_RGB888) 
