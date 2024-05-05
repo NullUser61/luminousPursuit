@@ -1,47 +1,52 @@
 import sys
 from src.UI import page_1, page_2, page_3
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStackedWidget
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget
 from PyQt5 import QtGui
-from src.UI.OpenCV import Worker
+from src.UI.OpenCV import CamFeedThread
 
-app = QApplication(sys.argv)
-stackedWidget = QStackedWidget()
+class MainWindow(QMainWindow):
+    def __init__(self, app):
+        super().__init__()
+        self.centralWidget = QStackedWidget()
+        self.app = app
+    
+        self.camFeedThread = CamFeedThread()
 
-def runUI():
-    window = QMainWindow()
+        # Adding Page 1 to the stacked widget
+        page1 = page_1.Page1()
+        page1.setupUi(self)
+        page1.proceedButton.clicked.connect(self.loadFirstPage)
+        self.centralWidget.addWidget(page1.centralwidget)
 
-    worker = Worker()
-    worker.start()
+        # Adding Page 2 to the stacked widget
+        page2 = page_2.Page2()
+        page2.setupUi(self)
+        page2.applyButton.clicked.connect(lambda: self.modeChange(page2.personcomboBox.currentText()))
+        page2.exitButton.clicked.connect(lambda: self.exitButtonClicked(page2.cameraFeed))
+        self.camFeedThread.ImageUpdate.connect(page2.imageUpdateSlot)
+        self.camFeedThread.personDetails.connect(page2.personDetailsSlot)
+        self.centralWidget.addWidget(page2.centralwidget)
+        
+        # Adding Page 2 to the stacked widget
+        page3 = page_3.Page3()
+        page3.setupUi(self)
+        self.camFeedThread.ImageUpdate.connect(page3.imageUpdateSlot)
+        page3.exitButton.clicked.connect(lambda: self.exitButtonClicked(page3.cameraFeed))
+        self.centralWidget.addWidget(page3.centralwidget)
+        page3.applyButton.clicked.connect(lambda: self.modeChange(page3.animalcomboBox.currentText()))
 
-    # Adding Page 1 to the stacked widget
-    page1 = page_1.Page1()
-    page1.setupUi(window)
-    page1.proceedButton.clicked.connect(lambda: stackedWidget.setCurrentIndex(1))
-    stackedWidget.addWidget(page1.centralwidget)
+        self.centralWidget.show()
 
-    # Adding Page 2 to the stacked widget
-    page2 = page_2.Page2()
-    page2.setupUi(window)
-    page2.applyButton.clicked.connect(lambda: modeChange(page2.personcomboBox.currentText()))
-    page2.exitButton.clicked.connect(lambda: worker.stop())
-    worker.ImageUpdate.connect(page2.imageUpdateSlot)
-    stackedWidget.addWidget(page2.centralwidget)
+    def loadFirstPage(self):
+        self.camFeedThread.start()
+        self.centralWidget.setCurrentIndex(1)
 
-    # Adding Page 2 to the stacked widget
-    page3 = page_3.Page3()
-    page3.setupUi(window)
-    worker.ImageUpdate.connect(page3.imageUpdateSlot)
-    page3.exitButton.clicked.connect(lambda: worker.stop())
-    stackedWidget.addWidget(page3.centralwidget)
+    def modeChange(self, val):
+        if val == "Animal":
+            self.centralWidget.setCurrentIndex(2)
+        else:
+            self.centralWidget.setCurrentIndex(1)
 
-    page3.applyButton.clicked.connect(lambda: modeChange(page3.animalcomboBox.currentText()))
-
-    stackedWidget.show()
-
-    sys.exit(app.exec_())
-
-def modeChange(val):
-    if val == "Animal":
-        stackedWidget.setCurrentIndex(2)
-    else:
-        stackedWidget.setCurrentIndex(1)
+    def exitButtonClicked(self, camFeed):
+        self.camFeedThread.stop()
+        self.app.closeAllWindows()
