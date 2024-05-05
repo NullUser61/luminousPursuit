@@ -524,6 +524,21 @@ class Page2(object):
 
     def imageUpdateSlot(self, image):
         self.cameraFeed.setPixmap(QtGui.QPixmap.fromImage(image))
+
+    def personDetailsSlot(self, personDetails):
+        if personDetails.authorizedCount != 0:
+            self.authorizedPersons = personDetails.authorizedPersons
+            # self.authorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.authorizedPersons[0].image))
+            self.authorisedNameLabel.setText(self.authorizedPersons[0].name)
+            self.authorisedAgeLabel.setNum(self.authorizedPersons[0].age)
+            self.authoriseCount.setNum(personDetails.authorizedCount)
+            self.authorisedPersonImage.setText("Authorized")
+        
+        if personDetails.unauthorizedCount != 0:
+            self.unauthorizedPersons = personDetails.unauthorizedPersons
+            self.unauthoriseCount.setNum(personDetails.unauthorizedCount)
+            # self.unauthorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.unauthorizedPersons[0].image))
+            self.unauthorisedPersonImage.setText("Unauthorized")
     
 from src.UI import Images_rc
 

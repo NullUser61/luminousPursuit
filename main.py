@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import os
+import sys
 import pickle
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
@@ -9,7 +10,8 @@ from src.faceDetection.faceDetection import camera
 from src.faceDetection.centerface import CenterFace
 from src.faceDetection.faceDetection import recognize_faces
 import time
-from src.UI.main_ui import runUI
+from src.UI.main_ui import MainWindow
+from PyQt5.QtWidgets import QApplication
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
 
@@ -50,7 +52,11 @@ def main():
     # load_models()
     # camera( facenet, model, encoder, centerface, Recognise=1)
     # recognize_faces()
-    runUI()
+
+    app = QApplication(sys.argv)
+    mainWindow = MainWindow(app)
+    sys.exit(app.exec_())
+
 
     cv.destroyAllWindows()
 
