@@ -7,12 +7,15 @@ import pickle
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from keras_facenet import FaceNet
-
-from src.faceDetection.centerface import CenterFace
+from centerface import CenterFace
+# from src.faceDetection.centerface import CenterFace
 from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
-
+face_recognizer = cv.face.LBPHFaceRecognizer_create()
+face_recognizer.read('data/faceDetection/face_trained.yml')
+features = np.load('data/faceDetection/Facefeatures.npy', allow_pickle=True)
+labels = np.load('data/faceDetection/Facelabels.npy')
 
 def load_models():
     global  facenet, model, encoder , centerface
@@ -38,9 +41,34 @@ def laser_movement(face):
     xan = 34.0383 - 0.0770748 * doty
     yan = 122.18 - 0.0910204 * dotx
     xAngle = f"{xan},{xan},{yan}\n"
-    serialInst.write(xAngle.encode('utf-8'))
+    # serialInst.write(xAngle.encode('utf-8'))
 
-def recognize_faces(boxes,img, faces, names):
+def recognize_faces(boxes, frame, faces, names):
+    x, y, w, h = boxes
+    x, y, w, h = int(x), int(y), int(w), int(h)
+    img = frame[y-2:y + h+2, x-2:x + w+2]  # Extract ROI with a margin of 2 pixels
+    cv.imshow('Face ROI', img)  # Display the face ROI
+    cv.waitKey(0)  # Wait indefinitely until a key is pressed
+    cv.destroyAllWindows()  # Close all OpenCV windows
+
+    faces.append(img)
+    gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    # Ensure that the face ROI dimensions are valid
+    if gray.shape[0] > 0 and gray.shape[1] > 0:
+        faces_roi = cv.resize(gray, (100, 100))  # Resize the face ROI if necessary
+        # Debugging output to inspect input data
+        print("Input data shape:", faces_roi.shape)
+        print("Input data dtype:", faces_roi.dtype)
+        label, confidence = face_recognizer.predict(faces_roi)
+        return label
+    else:
+        print("Invalid face ROI dimensions")
+        return None
+
+
+
+
+def recognize_faces_facenet(boxes,img, faces, names):
     print("faces = " , boxes)
     # print(faces[0])
     # print(type(faces))
@@ -128,8 +156,19 @@ def camera(frame):
 
 
 def main():
-    camera()
-    cv.destroyAllWindows()
+    cap = cv.VideoCapture(0)
+
+    # Check if the camera opened successfully
+    if not cap.isOpened():
+        print("Error: Could not open camera.")
+        exit()
+
+    # Loop to capture frames from the camera
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+        camera(frame)
+
 
 if __name__ == "__main__":
     main()

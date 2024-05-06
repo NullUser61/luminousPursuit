@@ -1,0 +1,11 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore user-specific Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore face Dataset
+data/faceDetection/faceDataset/
+data/faceDetection/Facefeatures.npy
