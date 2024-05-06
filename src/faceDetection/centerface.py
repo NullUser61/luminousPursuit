@@ -7,7 +7,7 @@ class CenterFace(object):
     def __init__(self, landmarks=True):
         self.landmarks = landmarks
         if self.landmarks:
-            self.net = cv2.dnn.readNetFromONNX("data/onnx/centerface.onnx")
+            self.net = cv2.dnn.readNetFromONNX("data/faceDetection/onnx/centerface.onnx")
         # else:
             # self.net = cv2.dnn.readNetFromONNX('../models/onnx/cface.1k.onnx')
         self.img_h_new, self.img_w_new, self.scale_h, self.scale_w = 0, 0, 0, 0

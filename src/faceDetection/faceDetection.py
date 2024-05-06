@@ -21,10 +21,10 @@ def load_models():
     facenet = FaceNet()
 
     # Load SVM model for face recognition
-    model = pickle.load(open("data/svm_model_S_G_160x160.pkl", 'rb'))
+    model = pickle.load(open("data/faceDetection/svm_model_S_G_160x160.pkl", 'rb'))
 
     # Load label encoder for face recognition
-    faces_embeddings = np.load("data/EmbeddedGS.npz")
+    faces_embeddings = np.load("data/faceDetection/EmbeddedGS.npz")
     Y = faces_embeddings['arr_1']
     encoder = LabelEncoder()
     encoder.fit(Y)
