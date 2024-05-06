@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from src.UI.OpenCV import convertToQtFormat
 
 
 class Page2(object):
@@ -523,7 +524,11 @@ class Page2(object):
         self.shootButton.setText(_translate("MainWindow", "SHOOT"))
 
     def imageUpdateSlot(self, image):
-        self.cameraFeed.setPixmap(QtGui.QPixmap.fromImage(image))
+        width = self.cameraFeed.width()
+        height = self.cameraFeed.height()
+        scaledImage = convertToQtFormat(image)
+        self.cameraFeed.setPixmap(QtGui.QPixmap.fromImage(scaledImage))
+        self.cameraFeed.setScaledContents(True)
 
     def personDetailsSlot(self, personDetails):
         if personDetails.authorizedCount != 0:

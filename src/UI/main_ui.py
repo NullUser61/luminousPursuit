@@ -1,6 +1,6 @@
 import sys
 from src.UI import page_1, page_2, page_3
-from PyQt5.QtWidgets import QMainWindow, QStackedWidget
+from PyQt5.QtWidgets import QMainWindow, QStackedWidget,QLabel
 from PyQt5 import QtGui
 from src.UI.OpenCV import CamFeedThread
 
