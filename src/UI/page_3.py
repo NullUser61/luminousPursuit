@@ -414,6 +414,12 @@ class Page3(object):
         self.cameraFeed.setPixmap(QtGui.QPixmap.fromImage(scaledImage))
         self.cameraFeed.setScaledContents(True)
 
+    def timeUpdater(self, time):
+        self.timeStamp.setText(time)
+    
+    def shootAnimal(self):
+        print("Shooting Animal")
+
 from src.UI import Images_rc
 
 
