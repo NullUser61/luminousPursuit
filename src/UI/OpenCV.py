@@ -8,9 +8,8 @@ from src.faceDetection.centerface import CenterFace
 import numpy
 
 class AuthorizedPersonDetails:
-    def __init__(self, name, age, image):
+    def __init__(self, name, image):
         self.name = name
-        self.age = age
         self.image = image
 
 class UnauthorizedPersonDetails:
@@ -37,28 +36,37 @@ class CamFeedThread(QThread):
     personDetails = pyqtSignal(PersonDetails)
     def run(self):
         self.ThreadActive = True
-        self.capture = cv.VideoCapture(2)
+        self.capture = cv.VideoCapture(0)
         if (self.capture.isOpened() == False):
             print("Unable to open the camera")
         else:
             while self.ThreadActive:
                 isTrue, frame = self.capture.read()
+                # cv.imshow("Video Feed",frame)
 
                 if (not isTrue):
                     print("Capture Stream Closed")
                 else:
-                    frame , faces, names , auth_count, unauth_count = camera(frame)
+                    image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                    flippedImage = cv.flip(image, 1)
+                    flippedImage , faces, names , auth_count, unauth_count = camera(flippedImage)
                     
                     authorized = []
-                    authorized.append(AuthorizedPersonDetails("Sonu", 21, "Authorized"))
-
                     unauthorized = []
-                    unauthorized.append(UnauthorizedPersonDetails("Unauthorized"))
 
-                    persons = PersonDetails(authorized, unauthorized, 5, 3)
+                    for i in range(0, len(faces)):
+                        if (names[i] != "unidentified"):
+                            person = AuthorizedPersonDetails(names[i], faces[i])
+                            authorized.append(person)
+                        else:
+                            person = UnauthorizedPersonDetails(faces[i])
+                            unauthorized.append(person)
 
-                    self.ImageUpdate.emit(frame)
+                    persons = PersonDetails(authorized, unauthorized, len(authorized), len(unauthorized))
+
+                    self.ImageUpdate.emit(flippedImage)
                     self.personDetails.emit(persons)
+                    
 
     
     def stop(self):
@@ -76,8 +84,6 @@ class CamFeedThread(QThread):
 #     return pic
 
 def convertToQtFormat(frame):
-    image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-    flippedImage = cv.flip(image, 1)
-    QtFormattedImage = QImage(flippedImage.data, flippedImage.shape[1], flippedImage.shape[0], QImage.Format_RGB888)
+    QtFormattedImage = QImage(frame.data, frame.shape[1], frame.shape[0], QImage.Format_RGB888)
 
     return QtFormattedImage
