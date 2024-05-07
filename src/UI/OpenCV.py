@@ -24,19 +24,22 @@ class PersonDetails:
         self.unauthorizedCount = unauthorizedCount
 
 def rescaleFrame(frame, width, height):
-    # width = int(frame.shape[1] * scale)
-    # height = int(frame.shape[0] * scale)
-
     dimensions = (width, height)
     
     return cv.resize(frame, dimensions, interpolation=cv.INTER_AREA)
 
-class CamFeedThread(QThread):
+class PersonCamFeedThread(QThread):
     ImageUpdate = pyqtSignal(numpy.ndarray)
     personDetails = pyqtSignal(PersonDetails)
+    def __init__(self):
+        super().__init__()
+        self.cameraIndex = 0
+        self.ThreadActive = False
+        self.capture = None
+
     def run(self):
         self.ThreadActive = True
-        self.capture = cv.VideoCapture(0)
+        self.capture = cv.VideoCapture(self.cameraIndex)
         if (self.capture.isOpened() == False):
             print("Unable to open the camera")
         else:
@@ -70,8 +73,42 @@ class CamFeedThread(QThread):
     
     def stop(self):
         self.ThreadActive = False
-        self.capture.release()
+        if (self.capture != None):
+            self.capture.release()
         self.quit()
+
+
+class AnimalCamFeedThread(QThread):
+    ImageUpdate = pyqtSignal(numpy.ndarray)
+    def __init__(self):
+        super().__init__()
+        self.cameraIndex = 0
+        self.ThreadActive = False
+        self.capture = None
+
+    def run(self):
+        self.ThreadActive = True
+        self.capture = cv.VideoCapture(self.cameraIndex)
+        if (self.capture.isOpened() == False):
+            print("Unable to open the camera")
+        else:
+            while self.ThreadActive:
+                isTrue, frame = self.capture.read()
+
+                if (not isTrue):
+                    print("Capture Stream Closed")
+                else:
+                    image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                    flippedImage = cv.flip(image, 1)
+
+                    self.ImageUpdate.emit(flippedImage)
+    
+    def stop(self):
+        self.ThreadActive = False
+        if (self.capture != None):
+            self.capture.release()
+        self.quit()
+
 
 # def convertToQtFormat(frame, width, height):
 #     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
