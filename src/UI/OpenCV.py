@@ -42,12 +42,13 @@ class CamFeedThread(QThread):
         else:
             while self.ThreadActive:
                 isTrue, frame = self.capture.read()
-                # cv.imshow("Video Feed",frame)
 
                 if (not isTrue):
                     print("Capture Stream Closed")
                 else:
-                    frame , faces, names , auth_count, unauth_count = camera(frame)
+                    image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+                    flippedImage = cv.flip(image, 1)
+                    flippedImage, faces, names , auth_count, unauth_count = camera(flippedImage)
                     
                     authorized = []
                     unauthorized = []
