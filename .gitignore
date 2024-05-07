@@ -4,7 +4,7 @@
 # Ignore user-specific Python files
 *.pyc
 *.pyo
-__pycache__/
+__pycache__
 
 # Ignore face Dataset
 data/faceDetection/faceDataset/
