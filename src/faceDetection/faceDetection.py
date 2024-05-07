@@ -7,8 +7,8 @@ import pickle
 import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 from keras_facenet import FaceNet
-from centerface import CenterFace
-# from src.faceDetection.centerface import CenterFace
+# from centerface import CenterFace
+from src.faceDetection.centerface import CenterFace
 from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
@@ -46,10 +46,10 @@ def laser_movement(face):
 def recognize_faces(boxes, frame, faces, names):
     x, y, w, h = boxes
     x, y, w, h = int(x), int(y), int(w), int(h)
-    img = frame[y-2:y + h+2, x-2:x + w+2]  # Extract ROI with a margin of 2 pixels
-    cv.imshow('Face ROI', img)  # Display the face ROI
-    cv.waitKey(0)  # Wait indefinitely until a key is pressed
-    cv.destroyAllWindows()  # Close all OpenCV windows
+    img = frame[y:h, x:w]  # Extract ROI with a margin of 2 pixels
+    # cv.imshow('Face ROI', img)  # Display the face ROI
+    # cv.waitKey(0)  # Wait indefinitely until a key is pressed
+    # cv.destroyAllWindows()  # Close all OpenCV windows
 
     faces.append(img)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -57,9 +57,11 @@ def recognize_faces(boxes, frame, faces, names):
     if gray.shape[0] > 0 and gray.shape[1] > 0:
         faces_roi = cv.resize(gray, (100, 100))  # Resize the face ROI if necessary
         # Debugging output to inspect input data
-        print("Input data shape:", faces_roi.shape)
-        print("Input data dtype:", faces_roi.dtype)
+        # print("Input data shape:", faces_roi.shape)
+        # print("Input data dtype:", faces_roi.dtype)
         label, confidence = face_recognizer.predict(faces_roi)
+        print(confidence)
+        # time.sleep(3)
         return label
     else:
         print("Invalid face ROI dimensions")
@@ -140,7 +142,7 @@ def camera(frame):
             # laser_movement(boxes)
 
 
-            laser_movement(x, y, w, h)
+            # laser_movement(x, y, w, h)
         for lm in lms:
             # laser_movement(lm[])
             for i in range(2, 3):

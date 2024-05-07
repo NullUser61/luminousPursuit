@@ -37,7 +37,7 @@ class CamFeedThread(QThread):
     personDetails = pyqtSignal(PersonDetails)
     def run(self):
         self.ThreadActive = True
-        self.capture = cv.VideoCapture(0)
+        self.capture = cv.VideoCapture(2)
         if (self.capture.isOpened() == False):
             print("Unable to open the camera")
         else:
