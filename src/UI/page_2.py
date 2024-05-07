@@ -11,11 +11,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.UI.OpenCV import convertToQtFormat
 
-
 class Page2(object):
     def setupUi(self, MainWindow):
+        self.authorizedPersonIndex = 0
+        self.unauthorizedPersonIndex = 0
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1183, 808)
+        MainWindow.resize(1236, 814)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -129,6 +130,12 @@ class Page2(object):
         self.horizontalLayout_2.setContentsMargins(-1, -1, -1, 11)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frame_6 = QtWidgets.QFrame(self.frame_3)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_6.sizePolicy().hasHeightForWidth())
+        self.frame_6.setSizePolicy(sizePolicy)
+        self.frame_6.setMinimumSize(QtCore.QSize(150, 0))
         self.frame_6.setStyleSheet("background-color: rgb(79, 96, 155);\n"
 "border:none;")
         self.frame_6.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -178,6 +185,12 @@ class Page2(object):
         self.gridLayout = QtWidgets.QGridLayout(self.frame_2)
         self.gridLayout.setObjectName("gridLayout")
         self.cameraFeed = QtWidgets.QLabel(self.frame_2)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(16)
+        sizePolicy.setVerticalStretch(9)
+        sizePolicy.setHeightForWidth(self.cameraFeed.sizePolicy().hasHeightForWidth())
+        self.cameraFeed.setSizePolicy(sizePolicy)
+        self.cameraFeed.setMinimumSize(QtCore.QSize(800, 450))
         self.cameraFeed.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-radius: 25px;")
         self.cameraFeed.setAlignment(QtCore.Qt.AlignCenter)
@@ -279,19 +292,19 @@ class Page2(object):
         self.label_7.setAlignment(QtCore.Qt.AlignCenter)
         self.label_7.setObjectName("label_7")
         self.gridLayout_2.addWidget(self.label_7, 1, 0, 1, 1)
-        self.unauthoriseCount = QtWidgets.QLabel(self.frame_4)
-        self.unauthoriseCount.setStyleSheet("color:rgb(255, 255, 255);\n"
+        self.unauthorisedCount = QtWidgets.QLabel(self.frame_4)
+        self.unauthorisedCount.setStyleSheet("color:rgb(255, 255, 255);\n"
 "border: 2px solid #414F80;\n"
 "")
-        self.unauthoriseCount.setAlignment(QtCore.Qt.AlignCenter)
-        self.unauthoriseCount.setObjectName("unauthoriseCount")
-        self.gridLayout_2.addWidget(self.unauthoriseCount, 1, 1, 1, 1)
-        self.authoriseCount = QtWidgets.QLabel(self.frame_4)
-        self.authoriseCount.setStyleSheet("color:rgb(255, 255, 255);\n"
+        self.unauthorisedCount.setAlignment(QtCore.Qt.AlignCenter)
+        self.unauthorisedCount.setObjectName("unauthorisedCount")
+        self.gridLayout_2.addWidget(self.unauthorisedCount, 1, 1, 1, 1)
+        self.authorisedCount = QtWidgets.QLabel(self.frame_4)
+        self.authorisedCount.setStyleSheet("color:rgb(255, 255, 255);\n"
 "border: 2px solid #414F80;")
-        self.authoriseCount.setAlignment(QtCore.Qt.AlignCenter)
-        self.authoriseCount.setObjectName("authoriseCount")
-        self.gridLayout_2.addWidget(self.authoriseCount, 0, 1, 1, 1)
+        self.authorisedCount.setAlignment(QtCore.Qt.AlignCenter)
+        self.authorisedCount.setObjectName("authorisedCount")
+        self.gridLayout_2.addWidget(self.authorisedCount, 0, 1, 1, 1)
         self.gridLayout_2.setColumnStretch(0, 5)
         self.gridLayout_2.setColumnStretch(1, 1)
         self.horizontalLayout_5.addWidget(self.frame_4)
@@ -300,6 +313,7 @@ class Page2(object):
         self.verticalLayout.addWidget(self.frame_7)
         self.verticalLayout.setStretch(0, 1)
         self.verticalLayout.setStretch(1, 10)
+        self.verticalLayout.setStretch(2, 2)
         self.horizontalLayout_9.addWidget(self.frame_9)
         self.frame_15 = QtWidgets.QFrame(self.frame_16)
         self.frame_15.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -316,12 +330,53 @@ class Page2(object):
         self.frame_12.setObjectName("frame_12")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_12)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label_11 = QtWidgets.QLabel(self.frame_12)
+        self.frame_19 = QtWidgets.QFrame(self.frame_12)
+        self.frame_19.setStyleSheet("border: none;")
+        self.frame_19.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_19.setObjectName("frame_19")
+        self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.frame_19)
+        self.horizontalLayout_11.setObjectName("horizontalLayout_11")
+        self.label_11 = QtWidgets.QLabel(self.frame_19)
         self.label_11.setStyleSheet("color: rgb(164, 175, 215);\n"
 "font: 25 10pt \"Calibri Light\";\n"
 "border: none;")
         self.label_11.setObjectName("label_11")
-        self.verticalLayout_2.addWidget(self.label_11)
+        self.horizontalLayout_11.addWidget(self.label_11)
+        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_11.addItem(spacerItem4)
+        self.authorisedLeftArrow = QtWidgets.QPushButton(self.frame_19)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.authorisedLeftArrow.sizePolicy().hasHeightForWidth())
+        self.authorisedLeftArrow.setSizePolicy(sizePolicy)
+        self.authorisedLeftArrow.setStyleSheet("border: 2px solid #414F80;")
+        self.authorisedLeftArrow.setText("")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/Icons/Icons/Arrow_left.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.authorisedLeftArrow.setIcon(icon4)
+        self.authorisedLeftArrow.setObjectName("authorisedLeftArrow")
+        self.horizontalLayout_11.addWidget(self.authorisedLeftArrow)
+        self.authorisedRightArrow = QtWidgets.QPushButton(self.frame_19)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.authorisedRightArrow.sizePolicy().hasHeightForWidth())
+        self.authorisedRightArrow.setSizePolicy(sizePolicy)
+        self.authorisedRightArrow.setStyleSheet("border: 2px solid #414F80;")
+        self.authorisedRightArrow.setText("")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/Icons/Icons/Arrow_left(1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.authorisedRightArrow.setIcon(icon5)
+        self.authorisedRightArrow.setObjectName("authorisedRightArrow")
+        self.horizontalLayout_11.addWidget(self.authorisedRightArrow)
+        self.horizontalLayout_11.setStretch(0, 4)
+        self.horizontalLayout_11.setStretch(1, 1)
+        self.horizontalLayout_11.setStretch(2, 1)
+        self.horizontalLayout_11.setStretch(3, 1)
+        self.verticalLayout_2.addWidget(self.frame_19)
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_2.addItem(spacerItem5)
         self.frame_11 = QtWidgets.QFrame(self.frame_12)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -335,6 +390,11 @@ class Page2(object):
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.frame_11)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
         self.frame_10 = QtWidgets.QFrame(self.frame_11)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.frame_10.sizePolicy().hasHeightForWidth())
+        self.frame_10.setSizePolicy(sizePolicy)
         self.frame_10.setStyleSheet("background-color: rgb(39, 51, 94);\n"
 "border-radius: 15px;")
         self.frame_10.setFrameShape(QtWidgets.QFrame.Box)
@@ -352,35 +412,34 @@ class Page2(object):
         self.authorisedNameLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.authorisedNameLabel.setObjectName("authorisedNameLabel")
         self.gridLayout_3.addWidget(self.authorisedNameLabel, 0, 1, 1, 1)
-        self.authorisedAgeLabel = QtWidgets.QLabel(self.frame_10)
-        self.authorisedAgeLabel.setStyleSheet("color: rgb(255, 255, 255);")
-        self.authorisedAgeLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.authorisedAgeLabel.setObjectName("authorisedAgeLabel")
-        self.gridLayout_3.addWidget(self.authorisedAgeLabel, 1, 1, 1, 1)
-        self.label_12 = QtWidgets.QLabel(self.frame_10)
-        self.label_12.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_12.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_12.setObjectName("label_12")
-        self.gridLayout_3.addWidget(self.label_12, 1, 0, 1, 1)
         self.horizontalLayout_7.addWidget(self.frame_10)
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_7.addItem(spacerItem4)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_7.addItem(spacerItem6)
         self.authorisedPersonImage = QtWidgets.QLabel(self.frame_11)
-        self.authorisedPersonImage.setStyleSheet("background-color: rgb(255, 255, 255);")
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.authorisedPersonImage.sizePolicy().hasHeightForWidth())
+        self.authorisedPersonImage.setSizePolicy(sizePolicy)
+        self.authorisedPersonImage.setMinimumSize(QtCore.QSize(110, 100))
+        self.authorisedPersonImage.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"\n"
+"border: none;")
         self.authorisedPersonImage.setText("")
         self.authorisedPersonImage.setTextFormat(QtCore.Qt.PlainText)
         self.authorisedPersonImage.setScaledContents(False)
         self.authorisedPersonImage.setObjectName("authorisedPersonImage")
         self.horizontalLayout_7.addWidget(self.authorisedPersonImage)
         self.horizontalLayout_7.setStretch(0, 9)
-        self.horizontalLayout_7.setStretch(1, 2)
-        self.horizontalLayout_7.setStretch(2, 5)
+        self.horizontalLayout_7.setStretch(1, 1)
+        self.horizontalLayout_7.setStretch(2, 7)
         self.verticalLayout_2.addWidget(self.frame_11)
         self.verticalLayout_2.setStretch(0, 1)
-        self.verticalLayout_2.setStretch(1, 3)
+        self.verticalLayout_2.setStretch(1, 1)
+        self.verticalLayout_2.setStretch(2, 7)
         self.verticalLayout_4.addWidget(self.frame_12)
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_4.addItem(spacerItem5)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_4.addItem(spacerItem7)
         self.frame_14 = QtWidgets.QFrame(self.frame_15)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(4)
@@ -396,14 +455,49 @@ class Page2(object):
         self.frame_14.setObjectName("frame_14")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.frame_14)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.label_10 = QtWidgets.QLabel(self.frame_14)
-        self.label_10.setStyleSheet("color: rgb(165, 4, 4);\n"
+        self.frame_20 = QtWidgets.QFrame(self.frame_14)
+        self.frame_20.setStyleSheet("border: none;")
+        self.frame_20.setFrameShape(QtWidgets.QFrame.Box)
+        self.frame_20.setObjectName("frame_20")
+        self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.frame_20)
+        self.horizontalLayout_14.setObjectName("horizontalLayout_14")
+        self.label_15 = QtWidgets.QLabel(self.frame_20)
+        self.label_15.setStyleSheet("color: rgb(165, 4, 4);\n"
 "font: 10pt \"MS Shell Dlg 2\";\n"
 "border: none;")
-        self.label_10.setObjectName("label_10")
-        self.verticalLayout_3.addWidget(self.label_10)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_3.addItem(spacerItem6)
+        self.label_15.setObjectName("label_15")
+        self.horizontalLayout_14.addWidget(self.label_15)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_14.addItem(spacerItem8)
+        self.unauthorisedLeftArrow = QtWidgets.QPushButton(self.frame_20)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.unauthorisedLeftArrow.sizePolicy().hasHeightForWidth())
+        self.unauthorisedLeftArrow.setSizePolicy(sizePolicy)
+        self.unauthorisedLeftArrow.setStyleSheet("border: 2px solid #414F80;")
+        self.unauthorisedLeftArrow.setText("")
+        self.unauthorisedLeftArrow.setIcon(icon4)
+        self.unauthorisedLeftArrow.setObjectName("unauthorisedLeftArrow")
+        self.horizontalLayout_14.addWidget(self.unauthorisedLeftArrow)
+        self.unauthorisedRightArrow = QtWidgets.QPushButton(self.frame_20)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.unauthorisedRightArrow.sizePolicy().hasHeightForWidth())
+        self.unauthorisedRightArrow.setSizePolicy(sizePolicy)
+        self.unauthorisedRightArrow.setStyleSheet("border: 2px solid #414F80;")
+        self.unauthorisedRightArrow.setText("")
+        self.unauthorisedRightArrow.setIcon(icon5)
+        self.unauthorisedRightArrow.setObjectName("unauthorisedRightArrow")
+        self.horizontalLayout_14.addWidget(self.unauthorisedRightArrow)
+        self.horizontalLayout_14.setStretch(0, 4)
+        self.horizontalLayout_14.setStretch(1, 1)
+        self.horizontalLayout_14.setStretch(2, 1)
+        self.horizontalLayout_14.setStretch(3, 1)
+        self.verticalLayout_3.addWidget(self.frame_20)
+        spacerItem9 = QtWidgets.QSpacerItem(17, 19, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem9)
         self.frame_18 = QtWidgets.QFrame(self.frame_14)
         self.frame_18.setStyleSheet("border: none;")
         self.frame_18.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -411,8 +505,8 @@ class Page2(object):
         self.frame_18.setObjectName("frame_18")
         self.horizontalLayout_10 = QtWidgets.QHBoxLayout(self.frame_18)
         self.horizontalLayout_10.setObjectName("horizontalLayout_10")
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem7)
+        spacerItem10 = QtWidgets.QSpacerItem(97, 17, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem10)
         self.unauthorisedPersonImage = QtWidgets.QLabel(self.frame_18)
         self.unauthorisedPersonImage.setStyleSheet("color: rgb(164, 175, 215);\n"
 "background-color: rgb(39, 51, 94);\n"
@@ -423,14 +517,14 @@ class Page2(object):
         self.unauthorisedPersonImage.setAlignment(QtCore.Qt.AlignCenter)
         self.unauthorisedPersonImage.setObjectName("unauthorisedPersonImage")
         self.horizontalLayout_10.addWidget(self.unauthorisedPersonImage)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_10.addItem(spacerItem8)
-        self.horizontalLayout_10.setStretch(0, 8)
-        self.horizontalLayout_10.setStretch(1, 20)
-        self.horizontalLayout_10.setStretch(2, 8)
+        spacerItem11 = QtWidgets.QSpacerItem(16, 17, QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_10.addItem(spacerItem11)
+        self.horizontalLayout_10.setStretch(0, 1)
+        self.horizontalLayout_10.setStretch(1, 2)
+        self.horizontalLayout_10.setStretch(2, 1)
         self.verticalLayout_3.addWidget(self.frame_18)
-        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_3.addItem(spacerItem9)
+        spacerItem12 = QtWidgets.QSpacerItem(17, 23, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem12)
         self.frame_13 = QtWidgets.QFrame(self.frame_14)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -444,12 +538,15 @@ class Page2(object):
         self.frame_13.setObjectName("frame_13")
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.frame_13)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem13)
         self.shootButton = QtWidgets.QPushButton(self.frame_13)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.MinimumExpanding)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.shootButton.sizePolicy().hasHeightForWidth())
         self.shootButton.setSizePolicy(sizePolicy)
+        self.shootButton.setMinimumSize(QtCore.QSize(100, 100))
         self.shootButton.setStyleSheet("background-color: rgb(165, 4, 4);\n"
 "color:rgb(255, 255, 255);\n"
 "\n"
@@ -457,40 +554,23 @@ class Page2(object):
 "border-radius: 15px;")
         self.shootButton.setObjectName("shootButton")
         self.horizontalLayout_8.addWidget(self.shootButton)
-        spacerItem10 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_8.addItem(spacerItem10)
-        self.muteButton = QtWidgets.QPushButton(self.frame_13)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.muteButton.sizePolicy().hasHeightForWidth())
-        self.muteButton.setSizePolicy(sizePolicy)
-        self.muteButton.setStyleSheet("background-color: rgba(92, 114, 187, 0.61);\n"
-"color:rgb(255, 255, 255);\n"
-"\n"
-"font: 10pt \"MS Shell Dlg 2\";\n"
-"border-radius: 15px;")
-        self.muteButton.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/Icons/Icons/sound_mute.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.muteButton.setIcon(icon4)
-        self.muteButton.setIconSize(QtCore.QSize(35, 35))
-        self.muteButton.setObjectName("muteButton")
-        self.horizontalLayout_8.addWidget(self.muteButton)
-        self.horizontalLayout_8.setStretch(0, 5)
-        self.horizontalLayout_8.setStretch(1, 3)
-        self.horizontalLayout_8.setStretch(2, 5)
+        spacerItem14 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem14)
+        self.horizontalLayout_8.setStretch(0, 3)
+        self.horizontalLayout_8.setStretch(1, 5)
+        self.horizontalLayout_8.setStretch(2, 3)
         self.verticalLayout_3.addWidget(self.frame_13)
         self.verticalLayout_3.setStretch(0, 1)
-        self.verticalLayout_3.setStretch(2, 6)
-        self.verticalLayout_3.setStretch(3, 2)
-        self.verticalLayout_3.setStretch(4, 3)
+        self.verticalLayout_3.setStretch(1, 1)
+        self.verticalLayout_3.setStretch(2, 61)
+        self.verticalLayout_3.setStretch(3, 4)
         self.verticalLayout_4.addWidget(self.frame_14)
         self.verticalLayout_4.setStretch(0, 2)
-        self.verticalLayout_4.setStretch(2, 4)
+        self.verticalLayout_4.setStretch(1, 1)
+        self.verticalLayout_4.setStretch(2, 3)
         self.horizontalLayout_9.addWidget(self.frame_15)
         self.horizontalLayout_9.setStretch(0, 7)
-        self.horizontalLayout_9.setStretch(1, 4)
+        self.horizontalLayout_9.setStretch(1, 3)
         self.verticalLayout_5.addWidget(self.frame_16)
         self.verticalLayout_5.setStretch(0, 1)
         self.verticalLayout_5.setStretch(1, 15)
@@ -513,14 +593,12 @@ class Page2(object):
         self.applyButton.setText(_translate("MainWindow", "Apply"))
         self.label_5.setText(_translate("MainWindow", "Authorised"))
         self.label_7.setText(_translate("MainWindow", "Unauthorised"))
-        self.unauthoriseCount.setText(_translate("MainWindow", "1"))
-        self.authoriseCount.setText(_translate("MainWindow", "1"))
+        self.unauthorisedCount.setText(_translate("MainWindow", "1"))
+        self.authorisedCount.setText(_translate("MainWindow", "1"))
         self.label_11.setText(_translate("MainWindow", "AUTHORISED PERSON"))
         self.label_9.setText(_translate("MainWindow", "Name:"))
         self.authorisedNameLabel.setText(_translate("MainWindow", "TextLabel"))
-        self.authorisedAgeLabel.setText(_translate("MainWindow", "TextLabel"))
-        self.label_12.setText(_translate("MainWindow", "Age: "))
-        self.label_10.setText(_translate("MainWindow", "UNAUTHORISED PERSON"))
+        self.label_15.setText(_translate("MainWindow", "UNAUTHORISED PERSON"))
         self.shootButton.setText(_translate("MainWindow", "SHOOT"))
 
     def imageUpdateSlot(self, image):
@@ -531,22 +609,49 @@ class Page2(object):
         self.cameraFeed.setScaledContents(True)
 
     def personDetailsSlot(self, personDetails):
-        if personDetails.authorizedCount != 0:
-            self.authorizedPersons = personDetails.authorizedPersons
-            # self.authorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.authorizedPersons[0].image))
-            self.authorisedNameLabel.setText(self.authorizedPersons[0].name)
-            self.authorisedAgeLabel.setNum(self.authorizedPersons[0].age)
-            self.authoriseCount.setNum(personDetails.authorizedCount)
-            self.authorisedPersonImage.setText("Authorized")
-        
-        if personDetails.unauthorizedCount != 0:
-            self.unauthorizedPersons = personDetails.unauthorizedPersons
-            self.unauthoriseCount.setNum(personDetails.unauthorizedCount)
-            # self.unauthorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.unauthorizedPersons[0].image))
-            self.unauthorisedPersonImage.setText("Unauthorized")
-    
-from src.UI import Images_rc
+        self.authCount = personDetails.authorizedCount
+        self.unauthCount = personDetails.unauthorizedCount
 
+        if personDetails.authorizedCount != 0 and self.authorizedPersonIndex < personDetails.authorizedCount:
+            self.authorizedPersons = personDetails.authorizedPersons
+            self.authorisedNameLabel.setText(self.authorizedPersons[self.authorizedPersonIndex].name)
+            self.authorisedCount.setNum(personDetails.authorizedCount)
+            self.authorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.authorizedPersons[self.authorizedPersonIndex].image))
+            self.authorisedPersonImage.setScaledContents(True)
+        
+        if personDetails.unauthorizedCount != 0 and self.unauthorizedPersonIndex < personDetails.unauthorizedCount:
+            self.unauthorizedPersons = personDetails.unauthorizedPersons
+            self.unauthorisedCount.setNum(personDetails.unauthorizedCount)
+            self.unauthorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.unauthorizedPersons[self.unauthorizedPersonIndex].image))
+            self.unauthorisedPersonImage.setScaledContents(True)
+
+    def authLeftArrow(self):
+        # print("authLeftArrow")
+        if (self.authorizedPersonIndex > 0):
+            self.authorizedPersonIndex -= 1
+
+    def authRightArrow(self):
+        # print("authRightArrow")
+        if (self.authorizedPersonIndex < self.authCount - 1):
+            self.authorizedPersonIndex += 1
+
+    def unauthLeftArrow(self):
+        # print("unauthLeftArrow")
+        if (self.unauthorizedPersonIndex > 0):
+            self.unauthorizedPersonIndex -= 1
+
+    def unauthRightArrow(self):
+        # print("unauthRightArrow")
+        if (self.unauthorizedPersonIndex < self.unauthCount - 1):
+            self.unauthorizedPersonIndex += 1
+
+    def timeUpdater(self, time):
+        self.timeStamp.setText(time)
+
+    def shootUnidentifiedPerson(self):
+        print("Shooting unidentified person")
+
+from src.UI import Images_rc
 
 if __name__ == "__main__":
     import sys

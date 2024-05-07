@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="Icons">
     <file>Icons/lup.jpg</file>
+    <file>Icons/LUMINOS.jpg</file>
     <file>Icons/sound_mute.png</file>
     <file>Icons/elephant(1).png</file>
     <file>Icons/image 1.png</file>
@@ -11,10 +12,11 @@
     <file>Icons/Add_square_fill.png</file>
     <file>Icons/Group 22.png</file>
     <file>Icons/maps-and-flags 1.png</file>
+    <file>Icons/Arrow_left(1).png</file>
+    <file>Icons/Arrow_left.png</file>
     <file>Icons/Group_fill.png</file>
     <file>Icons/security-camera(1) 1.png</file>
     <file>Icons/Vector 123.png</file>
-    <file>Icons/LUMINOS.jpg</file>
     <file>Icons/🦆 icon _search outline_.png</file>
     <file>Images.qrc</file>
     <file>Icons/🦆 icon _film_.png</file>
