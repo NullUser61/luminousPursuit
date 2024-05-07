@@ -12,10 +12,10 @@ from src.faceDetection.centerface import CenterFace
 from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
-label_encoder = LabelEncoder()
-face_recognizer = cv.face.LBPHFaceRecognizer_create()
-face_recognizer.read('data/faceDetection/face_trained.yml')
-labels = np.load('data/faceDetection/Facelabels.npy')
+# label_encoder = LabelEncoder()
+# face_recognizer = cv.face.LBPHFaceRecognizer_create()
+# face_recognizer.read('data/faceDetection/face_trained.yml')
+# labels = np.load('data/faceDetection/Facelabels.npy')
 # features = np.load('data/faceDetection/Facefeatures.npy', allow_pickle=True)
 
 def load_models():
@@ -83,7 +83,7 @@ def recognize_faces_facenet(boxes,img, faces, names):
     img = img[y-2:y + h-y+2, x-2:x + w-x+2]
     faces.append(img)
     # cv.imshow('Image', img)
-    time.sleep(1)
+    # time.sleep(1)
     try:
         img = cv.resize(img, (160, 160))
     except:
@@ -107,8 +107,8 @@ def camera(frame):
     # load_models()
     centerface=CenterFace()
     h, w = frame.shape[:2]
-    face_recognizer = cv.face.LBPHFaceRecognizer_create()
-    face_recognizer.read('data/faceDetection/face_trained.yml')
+    # face_recognizer = cv.face.LBPHFaceRecognizer_create()
+    # face_recognizer.read('data/faceDetection/face_trained.yml')
     # labels = np.load('data/faceDetection/Facelabels.npy')
     # labels = label_encoder.inverse_transform(labels)
     # print("Reversed labels:", labels)
@@ -125,7 +125,7 @@ def camera(frame):
             final_name = "random"
             # print("boxes=" , boxes)
             # if(Recognise==1):
-            final_name = recognize_faces(boxes,frame,faces,names)
+            # final_name = recognize_faces(boxes,frame,faces,names)
             # else:
                 # final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
