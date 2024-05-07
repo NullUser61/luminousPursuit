@@ -12,10 +12,11 @@ from src.faceDetection.centerface import CenterFace
 from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 # serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+label_encoder = LabelEncoder()
 face_recognizer = cv.face.LBPHFaceRecognizer_create()
 face_recognizer.read('data/faceDetection/face_trained.yml')
-features = np.load('data/faceDetection/Facefeatures.npy', allow_pickle=True)
 labels = np.load('data/faceDetection/Facelabels.npy')
+# features = np.load('data/faceDetection/Facefeatures.npy', allow_pickle=True)
 
 def load_models():
     global  facenet, model, encoder , centerface
@@ -106,6 +107,11 @@ def camera(frame):
     # load_models()
     centerface=CenterFace()
     h, w = frame.shape[:2]
+    face_recognizer = cv.face.LBPHFaceRecognizer_create()
+    face_recognizer.read('data/faceDetection/face_trained.yml')
+    # labels = np.load('data/faceDetection/Facelabels.npy')
+    # labels = label_encoder.inverse_transform(labels)
+    # print("Reversed labels:", labels)
     while True:
     #     ret, frame = cap.read()
         dets, lms = centerface(frame, h, w, threshold=0.35)

@@ -87,9 +87,15 @@ if __name__ == "__main__":
     print(labels, features)
     face_recognizer = cv2.face.LBPHFaceRecognizer_create()
     face_recognizer.train(features, labels)
-
+    file_path= 'data/faceDetection/face_trained.yml'
     # Save the trained recognizer
-    face_recognizer.save('data/faceDetection/face_trained.yml/')
+    if os.path.exists(file_path):
+    # Delete the file using os.remove() or os.unlink()
+        os.remove(file_path)  # or os.unlink(file_path)
+        print(f"File '{file_path}' has been successfully deleted.")
+    else:
+        print(f"File '{file_path}' does not exist.")
+    face_recognizer.save(file_path)
     np.save
 
     # Save features and labels
