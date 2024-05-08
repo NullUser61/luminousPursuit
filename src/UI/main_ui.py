@@ -14,7 +14,6 @@ class MainWindow(QMainWindow):
         self.personCamFeedThread = PersonCamFeedThread(self.face_recognizer)
         self.animalCamFeedThread = AnimalCamFeedThread()
         self.timeThread = TimeUpdateThread()
-        self.timeThread.start()
 
         # Adding Page 1 to the stacked widget
         page1 = page_1.Page1()
@@ -32,6 +31,7 @@ class MainWindow(QMainWindow):
         page2.authorisedRightArrow.clicked.connect(page2.authRightArrow)
         page2.unauthorisedLeftArrow.clicked.connect(page2.unauthLeftArrow)
         page2.unauthorisedRightArrow.clicked.connect(page2.unauthRightArrow)
+        page2.homeButton.clicked.connect(self.goHome)
         self.personCamFeedThread.ImageUpdate.connect(page2.imageUpdateSlot)
         self.personCamFeedThread.personDetails.connect(page2.personDetailsSlot)
         self.timeThread.DateUpdate.connect(page2.timeUpdater)
@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
         page3.exitButton.clicked.connect(lambda: self.exitButtonClicked())
         page3.applyButton.clicked.connect(lambda: self.modeChange(page3.animalcomboBox.currentText(), page3.cameracomboBox.currentIndex()))
         page3.shootButton.clicked.connect(page3.shootAnimal)
+        page3.homeButton.clicked.connect(self.goHome)
         self.timeThread.DateUpdate.connect(page3.timeUpdater)
         self.centralWidget.addWidget(page3.centralwidget)
 
@@ -52,6 +53,7 @@ class MainWindow(QMainWindow):
     # def closeEvent(self):
 
     def loadFirstPage(self):
+        self.timeThread.start()
         self.personCamFeedThread.start()
         self.centralWidget.setCurrentIndex(1)
 
@@ -102,3 +104,14 @@ class MainWindow(QMainWindow):
     
         self.app.closeAllWindows()
         self.app.exit()
+
+    def goHome(self):
+        self.centralWidget.setCurrentIndex(0)
+        if (self.personCamFeedThread.isRunning()):
+            self.personCamFeedThread.stop()
+
+        if (self.animalCamFeedThread.isRunning()):
+            self.animalCamFeedThread.stop()
+
+        if (self.timeThread.isRunning()):
+            self.timeThread.stop()
