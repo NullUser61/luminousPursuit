@@ -11,9 +11,11 @@ from src.faceDetection.centerface import CenterFace
 from src.faceDetection.faceDetection import recognize_faces
 import time
 from src.UI.main_ui import MainWindow
+import serial.tools.list_ports
+
 from PyQt5.QtWidgets import QApplication
 # Initialize the serial port for communication with the laser module
-# serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
 
 
 def initialize():
