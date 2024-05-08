@@ -29,32 +29,34 @@ def initialize():
             print(e)
 
 def load_models():
-    global  facenet, model, encoder, haarcascade , centerface
+    global  face_recognizer
 
     # Load FaceNet model
-    facenet = FaceNet()
+    # facenet = FaceNet()
 
     # Load SVM model for face recognition
-    model = pickle.load(open("data/svm_model_S_G_160x160.pkl", 'rb'))
+    # model = pickle.load(open("data/svm_model_S_G_160x160.pkl", 'rb'))
 
     # Load label encoder for face recognition
-    faces_embeddings = np.load("data/EmbeddedGS.npz")
-    Y = faces_embeddings['arr_1']
-    encoder = LabelEncoder()
-    encoder.fit(Y)
+    # faces_embeddings = np.load("data/EmbeddedGS.npz")
+    # Y = faces_embeddings['arr_1']
+    # encoder = LabelEncoder()
+    # encoder.fit(Y)
 
-    centerface = CenterFace()
+    # centerface = CenterFace()
     # Load Haar cascade classifier for face detection
     # haarcascade = cv.CascadeClassifier("../../data/haarcascade_frontalface_default.xml")
+    face_recognizer = cv.face.LBPHFaceRecognizer_create()
+    face_recognizer.read('data/faceDetection/face_trained.yml')
 
 def main():
     # initialize()
-    # load_models()
+    load_models()
     # camera( facenet, model, encoder, centerface, Recognise=1)
     # recognize_faces()
 
     app = QApplication(sys.argv)
-    mainWindow = MainWindow(app)
+    mainWindow = MainWindow(app,face_recognizer)
     sys.exit(app.exec_())
 
 

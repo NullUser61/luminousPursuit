@@ -28,7 +28,7 @@ while True:
     # y,x = mouse.position
     # yAngle=int(input("Rotate:"))
     yAngle=90
-    x1Angle=0
+    x1Angle=20
     # x1Angle=int(input("X"))
     # x1Angle = round((180/1919 )* x)
     # x2Angle = round((180/1919 )* x)

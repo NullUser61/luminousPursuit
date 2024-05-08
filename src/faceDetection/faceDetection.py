@@ -44,7 +44,7 @@ def laser_movement(face):
     xAngle = f"{xan},{xan},{yan}\n"
     # serialInst.write(xAngle.encode('utf-8'))
 
-def recognize_faces(boxes, frame, faces, names):
+def recognize_faces(boxes, frame, faces, names,face_recognizer):
     x, y, w, h = boxes
     x, y, w, h = int(x), int(y), int(w), int(h)
     img = frame[y:h, x:w]  # Extract ROI with a margin of 2 pixels
@@ -53,6 +53,7 @@ def recognize_faces(boxes, frame, faces, names):
     # cv.destroyAllWindows()  # Close all OpenCV windows
 
     faces.append(img)
+    # cv.imshow("face",img)
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
     # Ensure that the face ROI dimensions are valid
     if gray.shape[0] > 0 and gray.shape[1] > 0:
@@ -61,9 +62,15 @@ def recognize_faces(boxes, frame, faces, names):
         # print("Input data shape:", faces_roi.shape)
         # print("Input data dtype:", faces_roi.dtype)
         label, confidence = face_recognizer.predict(faces_roi)
-        print(confidence)
+        # print(confidence)
         # time.sleep(3)
-        return label
+        if(confidence>105):
+            if(label==1):
+                return "Sonu"
+            else:
+                return "Gautham"
+        else:
+            return "unidentified"
     else:
         print("Invalid face ROI dimensions")
         return None
@@ -94,11 +101,17 @@ def recognize_faces_facenet(boxes,img, faces, names):
     face_name = model.predict(ypred)
     decision_score = model.decision_function(ypred)
     print(decision_score)
-    final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "Unidentified"
-    names.append[final_name]
+    final_name = encoder.inverse_transform(face_name)[0] if decision_score > 0.7 else "unidentified"
+    if final_name==1:
+        final_name="Sonu"
+    else:
+        final_name="Gautham"
+    # final_name = name[final_name]
+    names.append(final_name)
+    print(final_name)
     return final_name
 
-def camera(frame):
+def camera(frame, face_recognizer):
     # cap = cv.VideoCapture(0)
     # ret, frame = cap.read()
     # try:
@@ -125,11 +138,12 @@ def camera(frame):
             final_name = "random"
             # print("boxes=" , boxes)
             # if(Recognise==1):
-            # final_name = recognize_faces(boxes,frame,faces,names)
+            final_name = recognize_faces(boxes,frame,faces,names,face_recognizer)
+
             # else:
                 # final_name=final_name="random"
             cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
-            print(final_name)
+            # print(final_name)
             # cv.circle(frame, (x + (w // 2), y + (h // 2)), radius=2, color=(255, 0, 0), thickness=2)
             # cv.putText(frame, str(final_name), (boxes[0], boxes[1] - 10), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv.LINE_AA)
 

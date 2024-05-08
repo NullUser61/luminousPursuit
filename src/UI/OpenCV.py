@@ -31,8 +31,9 @@ def rescaleFrame(frame, width, height):
 class PersonCamFeedThread(QThread):
     ImageUpdate = pyqtSignal(numpy.ndarray)
     personDetails = pyqtSignal(PersonDetails)
-    def __init__(self):
+    def __init__(self,face_recognizer):
         super().__init__()
+        self.face_recognizer = face_recognizer
         self.cameraIndex = 0
         self.ThreadActive = False
         self.capture = None
@@ -51,7 +52,8 @@ class PersonCamFeedThread(QThread):
                 else:
                     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     flippedImage = cv.flip(image, 1)
-                    flippedImage, faces, names , auth_count, unauth_count = camera(flippedImage)
+
+                    flippedImage, faces, names , auth_count, unauth_count = camera(flippedImage,self.face_recognizer) #human detection
                     
                     authorized = []
                     unauthorized = []
@@ -98,9 +100,10 @@ class AnimalCamFeedThread(QThread):
                 if (not isTrue):
                     print("Capture Stream Closed")
                 else:
+                    
                     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     flippedImage = cv.flip(image, 1)
-
+                    #animal detection here
                     self.ImageUpdate.emit(flippedImage)
     
     def stop(self):

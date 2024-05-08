@@ -6,12 +6,12 @@ from src.UI.OpenCV import PersonCamFeedThread, AnimalCamFeedThread
 from src.UI.datetimeupdater import TimeUpdateThread
 
 class MainWindow(QMainWindow):
-    def __init__(self, app):
+    def __init__(self, app, face_recognizer):
         super().__init__()
         self.centralWidget = QStackedWidget()
         self.app = app
-    
-        self.personCamFeedThread = PersonCamFeedThread()
+        self.face_recognizer = face_recognizer
+        self.personCamFeedThread = PersonCamFeedThread(self.face_recognizer)
         self.animalCamFeedThread = AnimalCamFeedThread()
         self.timeThread = TimeUpdateThread()
         self.timeThread.start()
