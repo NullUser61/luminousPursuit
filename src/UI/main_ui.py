@@ -1,5 +1,5 @@
 import sys
-from src.UI import page_1, page_2, page_3
+from src.UI import page_1, page_2, page_3, page_5
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget,QLabel
 from PyQt5 import QtGui
 from src.UI.OpenCV import PersonCamFeedThread, AnimalCamFeedThread
@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         page2.unauthorisedLeftArrow.clicked.connect(page2.unauthLeftArrow)
         page2.unauthorisedRightArrow.clicked.connect(page2.unauthRightArrow)
         page2.homeButton.clicked.connect(self.goHome)
+        page2.unauthorisedHistory.clicked.connect(lambda: self.centralWidget.setCurrentIndex(3))
         self.personCamFeedThread.ImageUpdate.connect(page2.imageUpdateSlot)
         self.personCamFeedThread.personDetails.connect(page2.personDetailsSlot)
         self.timeThread.DateUpdate.connect(page2.timeUpdater)
@@ -45,8 +46,14 @@ class MainWindow(QMainWindow):
         page3.applyButton.clicked.connect(lambda: self.modeChange(page3.animalcomboBox.currentText(), page3.cameracomboBox.currentIndex()))
         page3.shootButton.clicked.connect(page3.shootAnimal)
         page3.homeButton.clicked.connect(self.goHome)
+        page3.unauthorisedHistory.clicked.connect(lambda: self.centralWidget.setCurrentIndex(3))
         self.timeThread.DateUpdate.connect(page3.timeUpdater)
         self.centralWidget.addWidget(page3.centralwidget)
+
+        page5 = page_5.Page5()
+
+        page5.setupUi(self)
+        self.centralWidget.addWidget(page5.centralwidget)
 
         self.centralWidget.show()
 

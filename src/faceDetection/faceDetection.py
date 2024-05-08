@@ -46,7 +46,10 @@ def laser_movement(face):
     yan=(yan-180)*-1
     yan=yan-5
     xAngle = f"{xan},{xan},{yan}\n"
-    serialInst.write(xAngle.encode('utf-8'))
+    if (serialInst != None):
+        serialInst.write(xAngle.encode('utf-8'))
+    else:
+        pass
 
 def recognize_faces(boxes, frame, faces, names,face_recognizer):
     x, y, w, h = boxes
