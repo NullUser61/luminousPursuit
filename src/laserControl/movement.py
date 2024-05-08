@@ -1,23 +1,23 @@
 # pip install pyserial
 import serial.tools.list_ports
-from pynput.mouse import Controller
+# from pynput.mouse import Controller
 import time
 
-ports = serial.tools.list_ports.comports()
+# ports = serial.tools.list_ports.comports()
 serialInst = serial.Serial()
-mouse = Controller()
-portsList = []
+# mouse = Controller()
+# portsList = []
 
-for one in ports:
-    portsList.append(str(one))
-    print(str(one))
+# for one in ports:
+#     portsList.append(str(one))
+#     print(str(one))
 
-com = 4
+# com = 4
 
-for i in range(len(portsList)):
-    if portsList[i].startswith("COM" + str(com)):
-        use = "COM" + str(com)
-        print(use)
+# for i in range(len(portsList)):
+#     if portsList[i].startswith("COM" + str(com)):
+#         use = "COM" + str(com)
+#         print(use)
 
 serialInst.baudrate = 9600
 serialInst.port = "/dev/ttyUSB0"
@@ -27,7 +27,7 @@ while True:
     # time.sleep(0)
     # y,x = mouse.position
     # yAngle=int(input("Rotate:"))
-    yAngle=90
+    yAngle=0
     x1Angle=20
     # x1Angle=int(input("X"))
     # x1Angle = round((180/1919 )* x)
@@ -43,7 +43,7 @@ while True:
     # print(xAngle)
     # command=command + '\n'
     # print(xAngle)
-    # print(yAngle)
+    # print(y Angle)
     serialInst.write(xAngle.encode('utf-8'))
     if serialInst.in_waiting > 0:
         received_data = serialInst.readline().decode('utf-8').strip()
