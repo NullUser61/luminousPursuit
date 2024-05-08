@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.UI.OpenCV import convertToQtFormat
+import cv2 as cv
 
 class Page2(object):
     def setupUi(self, MainWindow):
@@ -616,13 +617,13 @@ class Page2(object):
             self.authorizedPersons = personDetails.authorizedPersons
             self.authorisedNameLabel.setText(self.authorizedPersons[self.authorizedPersonIndex].name)
             self.authorisedCount.setNum(personDetails.authorizedCount)
-            self.authorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.authorizedPersons[self.authorizedPersonIndex].image))
+            self.authorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.convertToQtFormat(self.authorizedPersons[self.authorizedPersonIndex].image)))
             self.authorisedPersonImage.setScaledContents(True)
         
         if personDetails.unauthorizedCount != 0 and self.unauthorizedPersonIndex < personDetails.unauthorizedCount:
             self.unauthorizedPersons = personDetails.unauthorizedPersons
             self.unauthorisedCount.setNum(personDetails.unauthorizedCount)
-            self.unauthorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.unauthorizedPersons[self.unauthorizedPersonIndex].image))
+            self.unauthorisedPersonImage.setPixmap(QtGui.QPixmap.fromImage(self.convertToQtFormat(self.unauthorizedPersons[self.unauthorizedPersonIndex].image)))
             self.unauthorisedPersonImage.setScaledContents(True)
 
     def authLeftArrow(self):
@@ -647,6 +648,13 @@ class Page2(object):
 
     def timeUpdater(self, time):
         self.timeStamp.setText(time)
+
+    def convertToQtFormat(self,frame):
+        # image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        flippedImage = cv.flip(frame, 1)
+        QtFormattedImage = QtGui.QImage(flippedImage.data, frame.shape[1], frame.shape[0], QtGui.QImage.Format_RGB888)
+
+        return QtFormattedImage
 
     def shootUnidentifiedPerson(self):
         print("Shooting unidentified person")
