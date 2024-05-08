@@ -12,8 +12,10 @@ from src.faceDetection.centerface import CenterFace
 from keras_facenet import FaceNet
 # Initialize the serial port for communication with the laser module
 import serial.tools.list_ports
-
-serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+try:
+    serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+except:
+    print()
 # label_encoder = LabelEncoder()
 # face_recognizer = cv.face.LBPHFaceRecognizer_create()
 # face_recognizer.read('data/faceDetection/face_trained.yml')
@@ -44,12 +46,12 @@ def laser_movement(face):
     xan = 25.4131 - 0.0790737 * doty
     yan = 116.849 - 0.0900342 * dotx
     yan=(yan-180)*-1
-    yan=yan-5
+    yan=yan-22
     xAngle = f"{xan},{xan},{yan}\n"
-    if (serialInst != None):
+    try:
         serialInst.write(xAngle.encode('utf-8'))
-    else:
-        pass
+    except:
+        print()
 
 def recognize_faces(boxes, frame, faces, names,face_recognizer):
     x, y, w, h = boxes
@@ -139,6 +141,7 @@ def camera(frame, face_recognizer):
         auth_count = 0
         names=[]
         faces=[]
+        global boxes
         # print("dets=",dets , "lms" , lms)
         for det in dets:
             boxes, score = det[:4], det[4]
@@ -166,7 +169,7 @@ def camera(frame, face_recognizer):
                 cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
                 auth_count+= 1
                 names.append(final_name)
-            laser_movement(boxes)
+        laser_movement(boxes)
 
 
             # laser_movement(x, y, w, h)
