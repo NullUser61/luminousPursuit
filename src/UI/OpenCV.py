@@ -5,7 +5,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from src.faceDetection.faceDetection import camera
 from src.faceDetection.centerface import CenterFace
+from src.animalDetection.animal import animal
 import numpy
+from ultralytics import YOLO
 
 class AuthorizedPersonDetails:
     def __init__(self, name, image):
@@ -104,6 +106,7 @@ class AnimalCamFeedThread(QThread):
                     image = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
                     flippedImage = cv.flip(image, 1)
                     #animal detection here
+                    flippedImage = animal(flippedImage)
                     self.ImageUpdate.emit(flippedImage)
     
     def stop(self):
