@@ -39,6 +39,7 @@ class PersonCamFeedThread(QThread):
         self.cameraIndex = 0
         self.ThreadActive = False
         self.capture = None
+        self.counter = 0
 
     def run(self):
         self.ThreadActive = True
@@ -71,6 +72,12 @@ class PersonCamFeedThread(QThread):
                     persons = PersonDetails(authorized, unauthorized, len(authorized), len(unauthorized))
 
                     self.ImageUpdate.emit(flippedImage)
+                    
+                    # if self.counter == 10:
+                    #     self.counter = 0
+                    #     self.personDetails.emit(persons)
+                    # else:
+                    #     self.counter += 1
                     self.personDetails.emit(persons)
                     
 
