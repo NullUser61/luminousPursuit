@@ -52,6 +52,18 @@ def laser_movement(face):
         serialInst.write(xAngle.encode('utf-8'))
     except:
         print()
+def laser_movement2(dotx,doty):
+    # x, y, w, h = face
+    xan = 25.4131 - 0.0790737 * doty
+    yan = 116.849 - 0.0900342 * dotx
+    yan=(yan-180)*-1
+    # yan=yan-22
+    xAngle = f"{xan},{xan},{yan}\n"
+    try:
+        serialInst.write(xAngle.encode('utf-8'))
+    except:
+        print()
+
 
 def recognize_faces(boxes, frame, faces, names,face_recognizer):
     x, y, w, h = boxes
@@ -141,7 +153,7 @@ def camera(frame, face_recognizer):
         auth_count = 0
         names=[]
         faces=[]
-        global boxes
+        global boxes, pointer
         # print("dets=",dets , "lms" , lms)
         for det in dets:
             boxes, score = det[:4], det[4]
@@ -169,14 +181,18 @@ def camera(frame, face_recognizer):
                 cv.rectangle(frame, (int(boxes[0]), int(boxes[1])), (int(boxes[2]), int(boxes[3])), (2, 255, 0), 1)
                 auth_count+= 1
                 names.append(final_name)
-        laser_movement(boxes)
-
+        # laser_movement(boxes)
+        try:
+            laser_movement2(lms[0][2])
+        except:
+            print()
 
             # laser_movement(x, y, w, h)
         for lm in lms:
             # laser_movement(lm[])
             for i in range(2, 3):
                 cv.circle(frame, (int(lm[i * 2]), int(lm[i * 2 + 1])), 2, (0, 0, 255), -1)
+                laser_movement2(int(lm[i * 2]),int(lm[i * 2 + 1]))
                 # if(i==2):
                     # laser_movement()
         return frame , faces, names , auth_count, unauth_count
