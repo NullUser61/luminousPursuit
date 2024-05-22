@@ -15,7 +15,7 @@ import serial.tools.list_ports
 try:
     serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
 except:
-    print()
+    print("Unable to open port")
 # label_encoder = LabelEncoder()
 # face_recognizer = cv.face.LBPHFaceRecognizer_create()
 # face_recognizer.read('data/faceDetection/face_trained.yml')
@@ -51,7 +51,7 @@ def laser_movement(face):
     try:
         serialInst.write(xAngle.encode('utf-8'))
     except:
-        print()
+        print("Unable to write to serial output")
 def laser_movement2(dotx,doty):
     # x, y, w, h = face
     xan = 25.4131 - 0.0790737 * doty
@@ -64,7 +64,7 @@ def laser_movement2(dotx,doty):
     try:
         serialInst.write(xAngle.encode('utf-8'))
     except:
-        print()
+        print("Unable to write to serial output")
 
 
 def recognize_faces(boxes, frame, faces, names,face_recognizer):
@@ -200,7 +200,7 @@ def camera(frame, face_recognizer):
                     # laser_movement()
                 dotx=int(lm[i * 2])
                 doty=int(lm[i * 2 + 1])
-        laser_movement2(dotx,doty)
+                laser_movement2(dotx,doty)
         return frame , faces, names , auth_count, unauth_count
     #     cv.imshow('out', frame)
     #     # Press Q on keyboard to stop recording

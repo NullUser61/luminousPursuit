@@ -15,8 +15,10 @@ import serial.tools.list_ports
 
 from PyQt5.QtWidgets import QApplication
 # Initialize the serial port for communication with the laser module
-serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
-
+try:
+    serialInst = serial.Serial("/dev/ttyUSB0", baudrate=9600)
+except:
+    print("Unable to open port")
 
 def initialize():
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
